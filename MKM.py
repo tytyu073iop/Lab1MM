@@ -15,7 +15,15 @@ def getCB(n: int, beta: float, module: int, a_0: int):
     return a
 
 def getLSF(n: int, p: int, c: int, betaArr, aArr):
-    
+    if ():
+        raise ValueError("")
+    a = [0.0] * (n - 1)
+    aStar = [0.0] * n
+    aStar[0] = float(a_0)
+    for i in range(1, n):
+        aStar[i] = modM(beta * aStar[i - 1], module)
+        a[i - 1] = aStar[i] / module
+    return a
 
 # def getMM(n: int, beta: float, module: int, a_0: int):
 
