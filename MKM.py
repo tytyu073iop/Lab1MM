@@ -1,4 +1,6 @@
 import math
+import random
+import scipy.stats as stats
 
 def modM(value, module):
     return value - module * math.trunc(value / module)
@@ -14,18 +16,27 @@ def getCB(n: int, beta: float, module: int, a_0: int):
         a[i - 1] = aStar[i] / module
     return a
 
-def getLSF(n: int, p: int, c: int, betaArr, aArr):
-    if ():
-        raise ValueError("")
-    a = [0.0] * (n - 1)
-    aStar = [0.0] * n
-    aStar[0] = float(a_0)
-    for i in range(1, n):
-        aStar[i] = modM(beta * aStar[i - 1], module)
-        a[i - 1] = aStar[i] / module
+def getMM(n: int, K: int, cArr, bArr):
+    v = bArr[0:K]
+    a = [0.0] * n
+    for i in range(n):
+        s = math.floor(cArr[i] * K)
+        a[i] = v[s]
+        v[s] = bArr[i+K]
     return a
 
-# def getMM(n: int, beta: float, module: int, a_0: int):
+def pirson(L: int, checkedArr, epsilon: float):
+    bins = [0] * L
+    step = 1 / L
+    for i in checkedArr:
+        bins[int(i // step)] += 1
+    criticalValue = stats.chi2.ppf(1 - epsilon, L)
+    x = 0.0
+    avg = float(n / L)
+    for i in range(L):
+        x += ((bins[i] - avg) ** 2) / avg
+    return x < criticalValue
+    
 
 
 if __name__ == "__main__":
@@ -33,4 +44,11 @@ if __name__ == "__main__":
     beta = 79507
     module = 2147483648
     n = 1000
-    print(getCB(n, beta, module, a_0))
+    K = 64
+    CB = getCB(n, beta, module, a_0)
+    print("CB: ", CB)
+    MM = getMM(n, K, getCB(n+K, beta, module, a_0), [random.random() for i in range(n+K)])
+    print("MM: ", MM)
+    epsilon = 0.05
+    print("check CB by pirson has", "passed" if pirson(100, CB, epsilon) else "failed")
+    print("check MM by pirson has", "passed" if pirson(100, MM, epsilon) else "failed")
