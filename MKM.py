@@ -36,6 +36,20 @@ def pirson(L: int, checkedArr, epsilon: float):
     for i in range(L):
         x += ((bins[i] - avg) ** 2) / avg
     return x < criticalValue
+
+def getCriticalDK(n: int, epsilon:float):
+    if(epsilon != 0.05):
+        raise ValueError("epsilon must be 0.05!")
+    return 1.36 / math.sqrt(n) # hardcoded :(
+
+def Kolmogorov(checkedArr, epsilon: float):
+    sortedArr = sorted(checkedArr)
+    D = 0.0
+    for i, j in enumerate(sortedArr):
+        data_driven = float(i) / len(sortedArr)
+        ideal = j # Равномерное расспределение
+        D = max(D, abs(data_driven - ideal))
+    return D < getCriticalDK(len(sortedArr), epsilon)
     
 
 
@@ -52,3 +66,5 @@ if __name__ == "__main__":
     epsilon = 0.05
     print("check CB by pirson has", "passed" if pirson(100, CB, epsilon) else "failed")
     print("check MM by pirson has", "passed" if pirson(100, MM, epsilon) else "failed")
+    print("check CB by Kolmogorov has", "passed" if Kolmogorov(CB, epsilon) else "failed")
+    print("check MM by Kolmogorov has", "passed" if Kolmogorov(MM, epsilon) else "failed")
