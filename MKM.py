@@ -1,6 +1,7 @@
 import math
 import random
 import scipy.stats as stats
+from graphs import *
 
 def modM(value, module):
     return value - module * math.trunc(value / module)
@@ -68,3 +69,5 @@ if __name__ == "__main__":
     print("check MM by pirson has", "passed" if pirson(100, MM, epsilon) else "failed")
     print("check CB by Kolmogorov has", "passed" if Kolmogorov(CB, epsilon) else "failed")
     print("check MM by Kolmogorov has", "passed" if Kolmogorov(MM, epsilon) else "failed")
+    plot_method_analysis(CB, "мультипликативный конгруэнтнтный")
+    plot_method_analysis(MM, "Макларена-Марсальи")
